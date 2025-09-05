@@ -1,4 +1,5 @@
 import { Client } from "pg";
+import { createTableUsers } from "./tableDB";
 
 let globalClient: Client | null = null;
 
@@ -13,6 +14,8 @@ const connectToDB = async () => {
     });
 
     await globalClient.connect();
+
+    await createTableUsers(globalClient);
 
     console.log("CONNECT TO DB SUCCESSFULLY");
   } catch (error) {
