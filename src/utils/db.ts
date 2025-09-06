@@ -1,5 +1,8 @@
 import { Client } from "pg";
-import { createTableUsers } from "./tableDB";
+import {
+  createTableFilledBasketsColdStorage,
+  createTableUsers,
+} from "./tableDB";
 
 let globalClient: Client | null = null;
 
@@ -16,6 +19,8 @@ const connectToDB = async () => {
     await globalClient.connect();
 
     await createTableUsers(globalClient);
+
+    await createTableFilledBasketsColdStorage(globalClient);
 
     console.log("CONNECT TO DB SUCCESSFULLY");
   } catch (error) {
