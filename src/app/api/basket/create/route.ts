@@ -1,3 +1,4 @@
+import { AddBasketType } from "@/types/Basket";
 import getClient from "@/utils/db";
 import getUser from "@/utils/getUserServer";
 import Joi from "joi";
@@ -10,8 +11,9 @@ const basketSchema = Joi.object({
     .pattern(/^09\d{9}$/)
     .required(),
   productName: Joi.string().required(),
-  weight: Joi.number().precision(2).positive().required(),
-  basketNumbers: Joi.array().items(Joi.string()).min(1).required(),
+  weightEntry: Joi.number().precision(2).positive().required(),
+  weightExit: Joi.number().precision(2).min(0).required(),
+  basketNumbers: Joi.array().items(Joi.string()).unique().min(1).required(),
   entryDate: Joi.date().required(),
   exitDate: Joi.date().greater(Joi.ref("EntryDate")).allow(null),
 });
@@ -42,6 +44,9 @@ export const POST = async (req: Request): Promise<Response> => {
         { status: 400 }
       );
 
+    if (body.weightEntry < body.weightExit)
+      return Response.json({ message: "Params not valid" }, { status: 400 });
+
     const queryCheck = `
     SELECT BasketNumbers
     FROM FilledBasketsColdStorage
@@ -59,8 +64,8 @@ export const POST = async (req: Request): Promise<Response> => {
 
     const insertQuery = `
       INSERT INTO FilledBasketsColdStorage
-      (FirstName, LastName, NationalID, MobileNumber, ProductName, Weight, BasketNumbers, Occupied, EntryDate, ExitDate)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+      (FirstName, LastName, NationalID, MobileNumber, ProductName, WeightEntry,WeightExit, BasketNumbers, Occupied, EntryDate, ExitDate)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
       RETURNING *;
     `;
 
@@ -70,7 +75,8 @@ export const POST = async (req: Request): Promise<Response> => {
       body.nationalID,
       body.mobileNumber,
       body.productName,
-      body.weight,
+      body.weightEntry,
+      body.weightExit,
       body.basketNumbers,
       body.exitDate ? false : true,
       body.entryDate,

@@ -1,10 +1,11 @@
-interface AddBasketType {
+export interface AddBasketType {
   firstName: string;
   lastName: string;
   nationalID: string;
   mobileNumber: string;
   productName: string;
-  weight: number;
+  weightEntry: number;
+  weightExit: number;
   basketNumbers: string[];
   entryDate: Date;
   exitDate?: Date;
