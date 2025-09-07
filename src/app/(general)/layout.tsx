@@ -1,3 +1,4 @@
+import MainLayout from "@/components/layout/MainLayout";
 import getUser from "@/utils/getUserServer";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -13,7 +14,11 @@ async function layout({
     redirect("/login");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <MainLayout>{children}</MainLayout>
+    </>
+  );
 }
 
 export default layout;

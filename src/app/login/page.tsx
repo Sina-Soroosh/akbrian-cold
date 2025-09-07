@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import getUser from "@/utils/getUserServer";
-import Main from "@/components/pages/Login/Main/Main";
+import Main from "@/components/pages/Login/Main";
 
 export const metadata: Metadata = {
   title: "ورود به حساب کاربری",

@@ -12,9 +12,74 @@
   --font-mono: var(--font-geist-mono);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  direction: rtl;
+/* Start Default Styles */
+::-webkit-scrollbar {
+  width: 50px;
+  background-color: #cedbe8;
 }
+
+::-webkit-scrollbar-track {
+  background-color: inherit;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #818181;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  line-height: 1.6;
+  font-size: 1.6rem;
+  color: #fff;
+  direction: rtl;
+  background-color: rgba(14, 35, 56, 1) !important;
+}
+
+*,
+*::after,
+*::before {
+  outline: none;
+  font-family: iranSans !important;
+  box-sizing: inherit;
+}
+
+a {
+  text-decoration: none;
+  transition: all 400ms ease;
+}
+
+i {
+  user-select: none;
+}
+
+.content {
+  max-width: 1288px;
+  margin: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.MuiDataGrid-columnHeaderTitle {
+  color: #000 !important;
+  font-family: iranSans !important;
+  text-align: center !important;
+}
+
+.MuiDataGrid-cell {
+  font-family: iranSans !important;
+  text-align: center !important;
+}
+
+.DatePicker {
+  z-index: 3 !important;
+}
+
+/* Finish Default Styles */

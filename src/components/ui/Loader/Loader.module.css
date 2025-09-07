@@ -1,0 +1,16 @@
+/* HTML: <div class="loader"></div> */
+.loader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0e2338a1;
+    z-index: 5;
+}
+
+.loader img {
+    max-width: 90vw;
+    max-height: 90vh;
+    filter: hue-rotate(0) invert(1);
+}
