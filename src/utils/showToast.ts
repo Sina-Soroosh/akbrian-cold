@@ -5,6 +5,9 @@ const showToast = (title: string): void => {
     title,
     position: "top",
     toast: true,
+    customClass: {
+      title: "text-2xl",
+    },
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,

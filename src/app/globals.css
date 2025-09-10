@@ -92,3 +92,7 @@ i {
 }
 
 /* Finish Default Styles */
+
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

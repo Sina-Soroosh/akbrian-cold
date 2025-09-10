@@ -15,7 +15,7 @@ const basketSchema = Joi.object({
   weightExit: Joi.number().precision(2).min(0).required(),
   basketNumbers: Joi.array().items(Joi.string()).unique().min(1).required(),
   entryDate: Joi.date().required(),
-  exitDate: Joi.date().greater(Joi.ref("EntryDate")).allow(null),
+  exitDate: Joi.date().allow(null),
 });
 
 export const POST = async (req: Request): Promise<Response> => {
@@ -47,20 +47,22 @@ export const POST = async (req: Request): Promise<Response> => {
     if (body.weightEntry < body.weightExit)
       return Response.json({ message: "Params not valid" }, { status: 400 });
 
-    const queryCheck = `
-    SELECT BasketNumbers
-    FROM FilledBasketsColdStorage
-    WHERE Occupied = TRUE
+    if (!body.exitDate) {
+      const queryCheck = `
+      SELECT BasketNumbers
+      FROM FilledBasketsColdStorage
+      WHERE Occupied = TRUE
       AND BasketNumbers && $1::text[];
-  `;
+      `;
 
-    const { rowCount } = await client.query(queryCheck, [body.basketNumbers]);
+      const { rowCount } = await client.query(queryCheck, [body.basketNumbers]);
 
-    if (rowCount === null || rowCount !== 0)
-      return Response.json(
-        { message: "Previously one of the baskets filled" },
-        { status: 401 }
-      );
+      if (rowCount === null || rowCount !== 0)
+        return Response.json(
+          { message: "Previously one of the baskets filled" },
+          { status: 401 }
+        );
+    }
 
     const insertQuery = `
       INSERT INTO FilledBasketsColdStorage

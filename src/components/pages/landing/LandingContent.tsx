@@ -35,8 +35,6 @@ function LandingContent() {
     fetchBaskets(1);
   }, []);
 
-  console.log(baskets);
-
   return (
     <>
       <div className="flex w-full flex-col gap-3">
@@ -56,7 +54,13 @@ function LandingContent() {
           </>
         )}
 
-        {pagination && (
+        {!loading && baskets.length === 0 ? (
+          <span className="text-white text-2xl block text-center">
+            اطلاعات خالی است{" "}
+          </span>
+        ) : null}
+
+        {pagination && pagination.totalPages ? (
           <div className="py-4">
             <Pagination
               activePage={pagination.page}
@@ -64,7 +68,7 @@ function LandingContent() {
               onChangePage={fetchBaskets}
             />
           </div>
-        )}
+        ) : null}
       </div>
     </>
   );
