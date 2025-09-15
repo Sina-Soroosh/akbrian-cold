@@ -30,7 +30,7 @@ export const POST = async (req: NextRequest): Promise<Response> => {
     const { error } = transactionSchema.validate(body, { abortEarly: false });
     if (error) {
       return Response.json(
-        { message: "Params not valid", error: error.details },
+        { message: "مقادیر نامعتبر است", error: error.details },
         { status: 400 }
       );
     }
@@ -51,7 +51,7 @@ export const POST = async (req: NextRequest): Promise<Response> => {
       if (body.weight > balance) {
         await client.query("ROLLBACK");
         return Response.json(
-          { message: "Insufficient balance: total OUT cannot exceed total IN" },
+          { message: "مجموع مقدار خروجی بیشتر از مجموع ورودی است" },
           { status: 400 }
         );
       }
@@ -84,7 +84,7 @@ export const POST = async (req: NextRequest): Promise<Response> => {
       if (occupied) {
         await client.query("ROLLBACK");
         return Response.json(
-          { message: `Basket ${occupied.basketcode} is already occupied` },
+          { message: `سبد ${occupied.basketcode} پر است` },
           { status: 409 }
         );
       }
@@ -94,7 +94,7 @@ export const POST = async (req: NextRequest): Promise<Response> => {
         if (!status || status.transactiontype !== "IN") {
           await client.query("ROLLBACK");
           return Response.json(
-            { message: `Basket ${b} is not occupied` },
+            { message: `سبد ${b} خالی نیست` },
             { status: 400 }
           );
         }

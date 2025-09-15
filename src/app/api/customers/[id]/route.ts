@@ -35,7 +35,7 @@ export const PUT = async (
     });
     if (error) {
       return Response.json(
-        { message: "Params not valid", error: error.details },
+        { message: "مقادیر نامعتبر است", error: error.details },
         { status: 400 }
       );
     }
@@ -43,7 +43,10 @@ export const PUT = async (
     const customerId = parseInt((await params).id, 10);
 
     if (isNaN(customerId)) {
-      return Response.json({ message: "Invalid customer ID" }, { status: 400 });
+      return Response.json(
+        { message: "مقادیر نامعتبر است (کد مشتری)" },
+        { status: 400 }
+      );
     }
 
     // بررسی وجود مشتری
@@ -52,7 +55,7 @@ export const PUT = async (
       [customerId]
     );
     if (checkCustomer.rowCount === 0) {
-      return Response.json({ message: "Customer not found" }, { status: 404 });
+      return Response.json({ message: "مشتری پیدا نشد" }, { status: 404 });
     }
 
     const fields: string[] = [];
@@ -86,7 +89,7 @@ export const PUT = async (
     }
 
     if (fields.length === 0) {
-      return Response.json({ message: "No fields to update" }, { status: 400 });
+      return Response.json({ message: "مقادیر نامعتبر" }, { status: 400 });
     }
 
     values.push(customerId);
@@ -105,7 +108,7 @@ export const PUT = async (
     } catch (err: any) {
       if (err?.code === "23505") {
         return Response.json(
-          { message: "This customer with the same product already exists" },
+          { message: "این کاربر قبلا اضافه شده" },
           { status: 409 }
         );
       }
@@ -150,7 +153,15 @@ export const GET = async (
     const customer = customerRows[0];
 
     const { rows: transactions } = await client.query(
-      "SELECT * FROM Transactions WHERE CustomerID = $1 ORDER BY TransactionDate DESC",
+      `
+     SELECT 
+  t.*,
+  COALESCE(ARRAY_AGG(tb.basketcode) FILTER (WHERE tb.basketcode IS NOT NULL), '{}') AS baskets
+FROM transactions t
+LEFT JOIN transactionbaskets tb ON tb.transactionid = t.transactionid
+WHERE t.customerid = $1
+GROUP BY t.transactionid
+`,
       [customerId]
     );
 
@@ -191,7 +202,6 @@ export const GET = async (
       [customerId]
     );
 
-    // 5️⃣ محاسبه مجموع ورودی و خروجی
     const { rows: totals } = await client.query(
       `
       SELECT
@@ -224,8 +234,8 @@ export const GET = async (
       {
         customer,
         transactions,
-        occupiedBaskets: occupiedBasketsByHall, // تمام سبدهای پر فعلی بر اساس سالن
-        myOccupiedBaskets: myOccupiedBasketsByHall, // سبدهای پر فعلی متعلق به این مشتری
+        occupiedBaskets: occupiedBasketsByHall,
+        myOccupiedBaskets: myOccupiedBasketsByHall,
         totalIn,
         totalOut,
       },

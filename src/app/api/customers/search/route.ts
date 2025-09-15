@@ -40,11 +40,16 @@ export const GET = async (req: Request): Promise<Response> => {
     const whereClause = "WHERE " + conditions.join(" AND ");
 
     const query = `
-      SELECT *
-      FROM Customers
-      ${whereClause}
-      ORDER BY CustomerID DESC
-    `;
+  SELECT 
+    c.*,
+    COALESCE(SUM(CASE WHEN t.transactiontype = 'IN' THEN t.weight ELSE 0 END), 0) AS total_in,
+    COALESCE(SUM(CASE WHEN t.transactiontype = 'OUT' THEN t.weight ELSE 0 END), 0) AS total_out
+  FROM customers c
+  LEFT JOIN transactions t ON t.customerid = c.customerid
+  ${whereClause}
+  GROUP BY c.customerid
+  ORDER BY c.customerid DESC
+`;
 
     const { rows } = await client.query(query, values);
 

@@ -59,13 +59,68 @@ export const POST = async (req: NextRequest): Promise<Response> => {
   } catch (err: any) {
     if (err?.code === "23505") {
       return Response.json(
-        { message: "This customer with the same product already exists" },
+        { message: "این مشتری از قبل ثبت نام کرده" },
         { status: 409 }
       );
     }
 
     return Response.json(
       { message: "Internal Server Error", error: err.message },
+      { status: 500 }
+    );
+  }
+};
+
+export const GET = async (req: Request): Promise<Response> => {
+  try {
+    const client = await getClient();
+    if (!client)
+      return Response.json(
+        { message: "Internal Server Error" },
+        { status: 500 }
+      );
+
+    const { isLogin } = await getUser();
+    if (!isLogin)
+      return Response.json({ message: "Unauthorized" }, { status: 403 });
+
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const pageSize = 10;
+    const offset = (page - 1) * pageSize;
+
+    const query = `
+  SELECT 
+    c.*,
+    COALESCE(SUM(CASE WHEN t.transactiontype = 'IN' THEN t.weight ELSE 0 END), 0) AS total_in,
+    COALESCE(SUM(CASE WHEN t.transactiontype = 'OUT' THEN t.weight ELSE 0 END), 0) AS total_out
+  FROM customers c
+  LEFT JOIN transactions t ON t.customerid = c.customerid
+  GROUP BY c.customerid
+  ORDER BY c.customerid DESC
+  LIMIT $1 OFFSET $2
+`;
+    const { rows } = await client.query(query, [pageSize, offset]);
+
+    const countQuery = `SELECT COUNT(*) AS total FROM customers;`;
+    const { rows: countRows } = await client.query(countQuery);
+    const total = parseInt(countRows[0].total, 10);
+
+    return Response.json(
+      {
+        data: rows,
+        pagination: {
+          page,
+          pageSize,
+          total,
+          totalPages: Math.ceil(total / pageSize),
+        },
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    return Response.json(
+      { message: "Internal Server Error", error },
       { status: 500 }
     );
   }

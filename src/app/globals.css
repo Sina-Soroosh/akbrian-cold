@@ -96,3 +96,13 @@ i {
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
+
+.swal2-confirm,
+.swal2-cancel,
+.swal2-deny {
+  font-size: 13px !important;
+}
+
+.my-calendar * {
+  color: #000;
+}

@@ -92,13 +92,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 </li>
                 <li>
                   <Link
-                    className={path === "new-basket" ? styles.active : ""}
-                    href="/new-basket"
+                    className={path === "new-customer" ? styles.active : ""}
+                    href="/new-customer"
                   >
                     <span className={styles.icon}>
                       <FaBasketShopping />
                     </span>
-                    ایجاد سبد{" "}
+                    ایجاد مشتری{" "}
                   </Link>
                 </li>
 

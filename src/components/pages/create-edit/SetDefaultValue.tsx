@@ -1,26 +1,21 @@
-import { AddBasketType, BasketContentType } from "@/types/Basket";
+import { CreateCustomerType, CustomerContentType } from "@/types/Customer";
 import { useFormikContext } from "formik";
 import React, { useEffect } from "react";
 
 interface Props {
-  data: BasketContentType;
+  data: CustomerContentType;
 }
 
 function SetDefaultValue({ data }: Props) {
-  const { setValues } = useFormikContext<AddBasketType>();
+  const { setValues } = useFormikContext<CreateCustomerType>();
 
   useEffect(() => {
     setValues({
       firstName: data.firstname,
       lastName: data.lastname,
-      nationalID: data.nationalid,
-      mobileNumber: data.mobilenumber,
+      nationalCode: data.nationalcode,
+      phone: data.phone,
       productName: data.productname,
-      weightEntry: data.weightentry,
-      weightExit: data.weightexit,
-      basketNumbers: data.basketnumbers,
-      entryDate: new Date(data.entrydate),
-      exitDate: data.exitdate ? new Date(data.exitdate) : undefined,
     });
   }, [data]);
 

@@ -1,10 +1,10 @@
-import { AddBasketType } from "@/types/Basket";
+import { CreateCustomerType } from "@/types/Customer";
 import { useFormikContext } from "formik";
 import React from "react";
 
 function NameFields() {
   const { errors, touched, setFieldValue, values } =
-    useFormikContext<AddBasketType>();
+    useFormikContext<CreateCustomerType>();
 
   return (
     <>
@@ -53,17 +53,17 @@ function NameFields() {
           کدملی
         </label>
         <input
-          value={values.nationalID}
-          onChange={(e) => setFieldValue("nationalID", e.target.value)}
+          value={values.nationalCode}
+          onChange={(e) => setFieldValue("nationalCode", e.target.value)}
           type="text"
           id="user"
           className="w-full bg-blue02  border border-blue02 text-[15px] px-[10px] py-[5px] rounded-[5px] text-[#fff] [transition:.3s]"
           placeholder="کدملی  را وارد کنید"
         />
 
-        {errors.nationalID && touched.nationalID && (
+        {errors.nationalCode && touched.nationalCode && (
           <p className="text-red-400 text-xl font-bold py-2">
-            {errors.nationalID}
+            {errors.nationalCode}
           </p>
         )}
       </div>
@@ -73,18 +73,16 @@ function NameFields() {
           شماره موبایل
         </label>
         <input
-          value={values.mobileNumber}
-          onChange={(e) => setFieldValue("mobileNumber", e.target.value)}
+          value={values.phone}
+          onChange={(e) => setFieldValue("phone", e.target.value)}
           type="text"
           id="user"
           className="w-full bg-blue02  border border-blue02 text-[15px] px-[10px] py-[5px] rounded-[5px] text-[#fff] [transition:.3s]"
           placeholder="شماره موبایل  را وارد کنید"
         />
 
-        {errors.mobileNumber && touched.mobileNumber && (
-          <p className="text-red-400 text-xl font-bold py-2">
-            {errors.mobileNumber}
-          </p>
+        {errors.phone && touched.phone && (
+          <p className="text-red-400 text-xl font-bold py-2">{errors.phone}</p>
         )}
       </div>
 
@@ -104,46 +102,6 @@ function NameFields() {
         {errors.productName && touched.productName && (
           <p className="text-red-400 text-xl font-bold py-2">
             {errors.productName}
-          </p>
-        )}
-      </div>
-
-      <div className={`w-100`}>
-        <label htmlFor="user" className="text-[15px] text-[#d1d7e2] mb-[5px]">
-          وزن وارد شده بر حسب کیلو گرم:
-        </label>
-        <input
-          value={values.weightEntry}
-          onChange={(e) => setFieldValue("weightEntry", e.target.value)}
-          type="number"
-          id="user"
-          className="w-full bg-blue02  border border-blue02 text-[15px] px-[10px] py-[5px] rounded-[5px] text-[#fff] [transition:.3s]"
-          placeholder="وزن را وارد کنید"
-        />
-
-        {errors.weightEntry && touched.weightEntry && (
-          <p className="text-red-400 text-xl font-bold py-2">
-            {errors.weightEntry}
-          </p>
-        )}
-      </div>
-
-      <div className={`w-100`}>
-        <label htmlFor="user" className="text-[15px] text-[#d1d7e2] mb-[5px]">
-          وزن خارج شده بر حسب کیلو گرم:
-        </label>
-        <input
-          value={values.weightExit}
-          onChange={(e) => setFieldValue("weightExit", e.target.value)}
-          type="number"
-          id="user"
-          className="w-full bg-blue02  border border-blue02 text-[15px] px-[10px] py-[5px] rounded-[5px] text-[#fff] [transition:.3s]"
-          placeholder="وزن را وارد کنید"
-        />
-
-        {errors.weightExit && touched.weightExit && (
-          <p className="text-red-400 text-xl font-bold py-2">
-            {errors.weightExit}
           </p>
         )}
       </div>

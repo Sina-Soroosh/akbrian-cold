@@ -1,8 +1,8 @@
 "use client";
 
-import BasketBox from "@/components/ui/basket/BasketBox";
+import CustomerBox from "@/components/ui/customer/CustomerBox";
 import Pagination from "@/components/ui/pagination/Pagination";
-import { BasketContentType } from "@/types/Basket";
+import { CustomerContentType } from "@/types/Customer";
 import React, { useEffect, useState } from "react";
 
 type Pagination = {
@@ -13,19 +13,19 @@ type Pagination = {
 };
 
 function LandingContent() {
-  const [baskets, setBaskets] = useState<BasketContentType[]>([]);
+  const [customers, setCustomers] = useState<CustomerContentType[]>([]);
   const [pagination, setPagination] = useState<Pagination | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchBaskets = async (page: number = 1) => {
     setLoading(true);
     try {
-      const res = await fetch(`api/basket/?page=${page}`);
+      const res = await fetch(`api/customers/?page=${page}`);
       const data = await res.json();
-      setBaskets(data.data || []);
+      setCustomers(data.data || []);
       setPagination(data.pagination);
     } catch (err) {
-      console.error("Error fetching baskets:", err);
+      console.error("Error fetching customers:", err);
     } finally {
       setLoading(false);
     }
@@ -48,13 +48,13 @@ function LandingContent() {
           </span>
         ) : (
           <>
-            {baskets.map((basket) => (
-              <BasketBox data={basket} key={basket.id} />
+            {customers.map((customer) => (
+              <CustomerBox data={customer} key={customer.customerid} />
             ))}
           </>
         )}
 
-        {!loading && baskets.length === 0 ? (
+        {!loading && customers.length === 0 ? (
           <span className="text-white text-2xl block text-center">
             اطلاعات خالی است{" "}
           </span>
