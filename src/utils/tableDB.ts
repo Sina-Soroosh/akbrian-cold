@@ -10,27 +10,57 @@ export const createTableUsers = async (client: Client) => {
   }
 };
 
-export const createTableFilledBasketsColdStorage = async (client: Client) => {
+export const createTableCustomers = async (client: Client) => {
   try {
     const query = `
-    CREATE TABLE IF NOT EXISTS filledBasketsColdStorage (
-    id SERIAL PRIMARY KEY,           
-    firstName VARCHAR(50) NOT NULL,           
-    lastName VARCHAR(50) NOT NULL,            
-    nationalID CHAR(10) NOT NULL,      
-    mobileNumber VARCHAR(15) NOT NULL,        
-    productName TEXT NOT NULL,        
-    weightEntry DECIMAL(10,2) NOT NULL,            
-    weightExit DECIMAL(10,2) NOT NULL,            
-    basketNumbers TEXT[] NOT NULL,            
-    occupied BOOLEAN NOT NULL DEFAULT TRUE,   
-    entryDate TIMESTAMP NOT NULL,             
-    exitDate TIMESTAMP NULL                   
+    CREATE TABLE IF NOT EXISTS Customers (
+        CustomerID SERIAL PRIMARY KEY,
+        FirstName VARCHAR(50) NOT NULL,
+        LastName VARCHAR(50) NOT NULL,
+        NationalCode VARCHAR(10) NOT NULL,
+        Phone VARCHAR(20),
+        ProductName VARCHAR(100) NOT NULL,
+        CONSTRAINT unique_customer_product UNIQUE (NationalCode, ProductName) 
     );
     `;
 
     await client.query(query);
   } catch (error) {
-    console.log("CREATE TABLE FilledBasketsColdStorage HAS ERROR : ", error);
+    console.log("CREATE TABLE Customers HAS ERROR : ", error);
+  }
+};
+
+export const createTableTransactions = async (client: Client) => {
+  try {
+    const query = `
+    CREATE TABLE IF NOT EXISTS Transactions (
+        TransactionID SERIAL PRIMARY KEY,
+        CustomerID INT NOT NULL REFERENCES Customers(CustomerID) ON DELETE CASCADE,
+        TransactionType VARCHAR(3) NOT NULL CHECK (TransactionType IN ('IN', 'OUT')),
+        TransactionDate TIMESTAMP NOT NULL DEFAULT NOW(),
+        Weight DECIMAL(10,2) NOT NULL,
+        Hall CHAR(1) NOT NULL CHECK (Hall IN ('A','B','C','D','E','F','G','H'))
+    );
+    `;
+
+    await client.query(query);
+  } catch (error) {
+    console.log("CREATE TABLE Transactions HAS ERROR : ", error);
+  }
+};
+
+export const createTableTransactionBaskets = async (client: Client) => {
+  try {
+    const query = `
+    CREATE TABLE IF NOT EXISTS TransactionBaskets (
+        TransactionBasketID SERIAL PRIMARY KEY,
+        TransactionID INT NOT NULL REFERENCES Transactions(TransactionID) ON DELETE CASCADE,
+        BasketCode VARCHAR(20) NOT NULL
+    );
+    `;
+
+    await client.query(query);
+  } catch (error) {
+    console.log("CREATE TABLE TransactionBaskets HAS ERROR : ", error);
   }
 };

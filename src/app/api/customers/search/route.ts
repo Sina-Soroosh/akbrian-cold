@@ -17,9 +17,7 @@ export const GET = async (req: Request): Promise<Response> => {
     const url = new URL(req.url);
     const q = url.searchParams.get("q")?.trim() || "";
 
-    if (!q) {
-      return Response.json({ data: [] }, { status: 200 });
-    }
+    if (!q) return Response.json({ data: [] }, { status: 200 });
 
     const words = q.split(/\s+/).filter(Boolean);
 
@@ -32,12 +30,8 @@ export const GET = async (req: Request): Promise<Response> => {
         FirstName ILIKE '%' || $${idx} || '%'
         OR LastName ILIKE '%' || $${idx} || '%'
         OR ProductName ILIKE '%' || $${idx} || '%'
-        OR MobileNumber ILIKE '%' || $${idx} || '%'
-        OR EXISTS (
-          SELECT 1
-          FROM unnest(BasketNumbers) AS b
-          WHERE b ILIKE '%' || $${idx} || '%'
-        )
+        OR Phone ILIKE '%' || $${idx} || '%'
+        OR NationalCode ILIKE '%' || $${idx} || '%'
       `);
       values.push(word);
       idx++;
@@ -47,9 +41,9 @@ export const GET = async (req: Request): Promise<Response> => {
 
     const query = `
       SELECT *
-      FROM FilledBasketsColdStorage
+      FROM Customers
       ${whereClause}
-      ORDER BY EntryDate DESC
+      ORDER BY CustomerID DESC
     `;
 
     const { rows } = await client.query(query, values);
