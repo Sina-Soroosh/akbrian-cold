@@ -113,8 +113,8 @@ function AddTransactionBox() {
           typeNew === "IN" ? "bg-green-900" : "bg-red-900"
         }`}
       >
-        <td className="w-[30px]">{transactions.length + 1}</td>
-        <td className="text-2xl text-white">
+        <td className="w-[70px]">{transactions.length + 1}</td>
+        <td className="text-2xl text-white min-w-110">
           {typeNew === "IN" ? (
             <DatePicker
               value={selectedDay}
@@ -137,7 +137,7 @@ function AddTransactionBox() {
             <DatePicker
               value={selectedDay}
               onChange={setSelectedDay}
-              inputPlaceholder="تاریخ ورود"
+              inputPlaceholder="تاریخ خروج"
               locale="fa"
               maximumDate={utils("fa").getToday()}
               shouldHighlightWeekends

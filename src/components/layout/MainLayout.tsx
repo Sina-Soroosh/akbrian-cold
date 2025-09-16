@@ -87,7 +87,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <span className={styles.icon}>
                       <FaSearch />
                     </span>
-                    جستوجو مشتری
+                    جست جو مشتری
                   </Link>
                 </li>
 
@@ -99,7 +99,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <span className={styles.icon}>
                       <FaSearch />
                     </span>
-                    جستوجو سبد
+                    جست جو سبد
                   </Link>
                 </li>
                 <li>

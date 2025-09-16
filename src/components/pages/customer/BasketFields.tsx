@@ -105,7 +105,7 @@ function BasketFields({ hall, value, setValue }: Props) {
         menuPortalTarget={document.body}
         value={value}
         onChange={changeValueBasket}
-        className="w-150"
+        className="w-120"
         styles={{
           multiValue: (base) => ({
             ...base,

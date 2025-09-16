@@ -8,6 +8,7 @@ import Main from "../create-edit/main";
 import TransactionBox from "@/components/ui/transaction/TransactionBox";
 import Swal from "sweetalert2";
 import AddTransactionBox from "./AddTransactionBox";
+import { BiPlus } from "react-icons/bi";
 
 interface Props {
   id: string;
@@ -106,10 +107,10 @@ function MainCustomer({ id }: Props) {
 
           {isAddNew || (
             <button
-              className="bg-blue02 px-3 py-1 rounded cursor-pointer"
+              className="bg-blue02 text-[28px] flex justify-center rounded-2xl items-center px-3 py-1 w-15 h-15 cursor-pointer"
               onClick={addTransaction}
             >
-              +
+              <BiPlus />
             </button>
           )}
         </div>
