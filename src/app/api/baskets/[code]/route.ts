@@ -1,7 +1,7 @@
 import getClient from "@/utils/db";
 import getUser from "@/utils/getUserServer";
 
-type Params = { params: { code: string } };
+type Params = { params: Promise<{ code: string }> };
 
 export const GET = async (
   req: Request,
