@@ -45,8 +45,8 @@ function BasketFields({ hall, value, setValue }: Props) {
 
     let newOptions: optionsType[] = Array.from({ length: 600 }, (_, i) => ({
       id: i + 1,
-      label: String(i + 1),
-      value: i + 1,
+      label: String(i + 1).padStart(3, "0"),
+      value: String(i + 1).padStart(3, "0"),
     }));
 
     const occupiedBasketCurrent = occupiedBaskets[hall]
@@ -75,7 +75,11 @@ function BasketFields({ hall, value, setValue }: Props) {
     const newOptions: optionsType[] = [];
 
     occupiedBasketCurrent.forEach((number) =>
-      newOptions.push({ id: number, label: String(number), value: number })
+      newOptions.push({
+        id: number,
+        label: String(number).padStart(3, "0"),
+        value: String(number).padStart(3, "0"),
+      })
     );
 
     setOptions(newOptions);
@@ -101,7 +105,7 @@ function BasketFields({ hall, value, setValue }: Props) {
         menuPortalTarget={document.body}
         value={value}
         onChange={changeValueBasket}
-        className="w-80"
+        className="w-150"
         styles={{
           multiValue: (base) => ({
             ...base,

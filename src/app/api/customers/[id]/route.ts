@@ -248,3 +248,57 @@ GROUP BY t.transactionid
     );
   }
 };
+
+export const DELETE = async (
+  req: Request,
+  { params }: Params
+): Promise<Response> => {
+  try {
+    const client = await getClient();
+    if (!client) {
+      return Response.json(
+        { message: "Internal Server Error" },
+        { status: 500 }
+      );
+    }
+
+    const { isLogin } = await getUser();
+    if (!isLogin) {
+      return Response.json({ message: "Unauthorized" }, { status: 403 });
+    }
+
+    const customerId = parseInt((await params).id, 10);
+    if (isNaN(customerId)) {
+      return Response.json(
+        { message: "همچین فروشنده موجود نیست" },
+        { status: 400 }
+      );
+    }
+
+    const check = await client.query(
+      "SELECT 1 FROM customers WHERE customerid = $1",
+      [customerId]
+    );
+
+    if (check.rowCount === 0) {
+      return Response.json(
+        { message: "همچین فروشنده موجود نیست" },
+        { status: 404 }
+      );
+    }
+
+    await client.query("DELETE FROM customers WHERE customerid = $1", [
+      customerId,
+    ]);
+
+    return Response.json(
+      { message: "Customer deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return Response.json(
+      { message: "Internal Server Error", error },
+      { status: 500 }
+    );
+  }
+};

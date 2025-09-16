@@ -59,7 +59,7 @@ export const POST = async (req: NextRequest): Promise<Response> => {
   } catch (err: any) {
     if (err?.code === "23505") {
       return Response.json(
-        { message: "این مشتری از قبل ثبت نام کرده" },
+        { message: "این مشتری با این محصول از قبل ثبت نام شده " },
         { status: 409 }
       );
     }

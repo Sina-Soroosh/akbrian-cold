@@ -87,7 +87,19 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <span className={styles.icon}>
                       <FaSearch />
                     </span>
-                    جستوجو
+                    جستوجو مشتری
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    className={path === "search" ? styles.active : ""}
+                    href="/search-basket"
+                  >
+                    <span className={styles.icon}>
+                      <FaSearch />
+                    </span>
+                    جستوجو سبد
                   </Link>
                 </li>
                 <li>

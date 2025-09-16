@@ -87,7 +87,7 @@ function MainCustomer({ id }: Props) {
           <div className="flex gap-6">
             <div className="flex gap-x-7 items-center gap-y-4 flex-wrap">
               <span className="text-blue01 text-2xl">
-                وزن وارد شده :
+                کل وزن وارد شده :
                 <br />
                 <span className="font-bold flex w-full text-left justify-end ">
                   {Number(totalIn)}Kg
@@ -95,7 +95,7 @@ function MainCustomer({ id }: Props) {
               </span>
 
               <span className="text-blue01 text-2xl">
-                وزن خارج شده :
+                کل وزن خارج شده :
                 <br />
                 <span className="font-bold flex w-full text-left justify-end">
                   {Number(totalOut)}Kg
