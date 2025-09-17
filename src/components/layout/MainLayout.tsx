@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, MouseEvent } from "react";
+import React, { useState, MouseEvent, useRef } from "react";
 import Link from "next/link";
 import { FaHome, FaSignOutAlt, FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
@@ -10,6 +10,8 @@ import { convertToSolarDate } from "@/utils/date";
 import Loader from "../ui/Loader/Loader";
 import styles from "./MainLayout.module.css";
 import { FaBasketShopping } from "react-icons/fa6";
+import { FcDataBackup, FcDataRecovery } from "react-icons/fc";
+import showToast from "@/utils/showToast";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -20,6 +22,41 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [isFetch, setIsFetch] = useState<boolean>(false);
   const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
   const path = usePathname();
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = async () => {
+    if (!fileRef.current) return;
+
+    const file = fileRef.current.files?.[0];
+
+    if (!file) return showToast("لطفا فایل JSON انتخاب کنید");
+
+    if (file.type !== "application/json")
+      return showToast("لطفا فایل JSON انتخاب کنید");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setIsFetch(true);
+
+    const res = await fetch("/api/restore", {
+      method: "POST",
+      body: formData,
+    });
+
+    setIsFetch(false);
+
+    const data = await res.json();
+
+    if (res.status !== 200) showToast(data.message || data.error);
+    else location.reload();
+  };
+
+  const openInputFile = () => {
+    if (!fileRef.current) return;
+
+    fileRef.current.click();
+  };
 
   const showMenu = () => setIsShowMenu(true);
   const hideMenu = () => setIsShowMenu(false);
@@ -87,7 +124,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <span className={styles.icon}>
                       <FaSearch />
                     </span>
-                    جست جو مشتری
+                    جستجو مشتری
                   </Link>
                 </li>
 
@@ -99,7 +136,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <span className={styles.icon}>
                       <FaSearch />
                     </span>
-                    جست جو سبد
+                    جستجو باکس
                   </Link>
                 </li>
                 <li>
@@ -112,6 +149,27 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     </span>
                     ایجاد مشتری{" "}
                   </Link>
+                </li>
+
+                <li>
+                  <Link href="/api/backup" target="_blank">
+                    <span className={styles.icon}>
+                      <FcDataBackup />
+                    </span>
+                    تهیه بک اپ
+                  </Link>
+                </li>
+
+                <li>
+                  <span
+                    className="cursor-pointer flex gap-2.5 m-2.5 items-center p-2.5"
+                    onClick={openInputFile}
+                  >
+                    <span className={styles.icon}>
+                      <FcDataRecovery />
+                    </span>
+                    اپلود بک اپ{" "}
+                  </span>
                 </li>
 
                 <li>
@@ -156,6 +214,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           </div>
         </div>
       </div>
+
+      <input
+        type="file"
+        accept="application/json"
+        onChange={handleUpload}
+        className="hidden"
+        ref={fileRef}
+      />
       {isFetch ? <Loader /> : null}
     </>
   );
